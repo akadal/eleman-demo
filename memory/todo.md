@@ -12,4 +12,7 @@
 - [ ] Give a view on 20-year USD/Euro vol and CPI correlation for the PSE swap [[research-requests-1999-q4]]
 - [ ] Help structure the Dabhol firm power sale proposal [[research-requests-1999-q4]]
 - [ ] Have Stinson audit the UK power vol curve generator [[research-requests-1999-q4]]
-
+- [ ] Price the Amerada Hess day-rate hedge: $100k floor 2001-2004, find the costless call strike [[research-requests-2000-q1]]
+- [ ] Schedule the Argentina modelling meeting with Michael Guerriero via Shirley [[research-requests-2000-q1]]
+- [ ] Review the credit trading website articles and Katja's copyright follow-up [[research-requests-1999-q4]]
+- [ ] Phone insurance candidate Ray Spudeck (week of 10 Jan) [[research-group-staffing-2000-01]]
