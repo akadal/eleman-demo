@@ -86,8 +86,7 @@ def main():
         "sizes": layer_sizes(),
         "harness": harness(a.kk),
     }
-    sys.stdout.reconfigure(encoding="utf-8", newline="
-")  # Windows consoles default to cp1252
+    sys.stdout.reconfigure(encoding="utf-8", newline="\n")  # Windows consoles default to cp1252
     print(json.dumps(rec, indent=1, ensure_ascii=False))
 
 
