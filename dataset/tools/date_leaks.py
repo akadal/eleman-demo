@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """date_leaks.py: find dates in the memory core that the simulated clock cannot have produced.
 
-A replayed mailbox lives in the past. Any ISO date after the simulated today, or before the
-first message, came from the machine's real clock (or was invented), and once it lands in the
-archive it is immutable and poisons later fabrication checks. The mechanism's own files
+A replayed mailbox lives in the past. A date more than a year after the simulated today, or more
+than a year before the first message, came from the machine's real clock (or was invented), and
+once it lands in the archive it is immutable and poisons later fabrication checks. The year of
+slack on each side is there because legitimate dates do reach ahead: a question's due date is 30
+days out, a conference date in a fact's prose can be months out. (The first version used the
+exact window and stopped batch 2 on a correct due date.) The mechanism's own files
 (rules/, tools/, secret/) are exempt: they carry the real dates of their authoring.
 
   python date_leaks.py --today 2000-03-14 --first 1999-12-02
@@ -11,6 +14,7 @@ Prints JSON {"count": n, "examples": [...]}; exit 1 if n > 0.
 """
 import argparse
 import json
+from datetime import date, timedelta
 import re
 import sys
 from pathlib import Path
@@ -25,13 +29,15 @@ def main():
     p.add_argument("--today", required=True)
     p.add_argument("--first", required=True)
     a = p.parse_args()
+    lo = (date.fromisoformat(a.first) - timedelta(days=366)).isoformat()
+    hi = (date.fromisoformat(a.today) + timedelta(days=366)).isoformat()
     hits = []
     for f in sorted(MEM.rglob("*.md")):
         rel = f.relative_to(MEM)
         if rel.parts[0] in EXEMPT:
             continue
         for d in DATE.findall(rel.name):
-            if not (a.first <= d <= a.today):
+            if not (lo <= d <= hi):
                 hits.append(f"name {rel}")
         fence = None  # message bodies are fenced (feed.py) and may quote any date: skip them
         for n, ln in enumerate(f.read_text(encoding="utf-8", errors="replace").splitlines(), 1):
@@ -45,7 +51,7 @@ def main():
             if fence:
                 continue
             for d in DATE.findall(ln):
-                if not (a.first <= d <= a.today):
+                if not (lo <= d <= hi):
                     hits.append(f"{rel.as_posix()}:{n} {d}")
     print(json.dumps({"count": len(hits), "examples": hits[:20]}))
     sys.exit(1 if hits else 0)

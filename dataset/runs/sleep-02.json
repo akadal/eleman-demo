@@ -1,0 +1,151 @@
+{
+ "sleep": 2,
+ "simulated_today": "2000-01-10",
+ "feed": {
+  "batch": 2,
+  "first_seq": 101,
+  "last_seq": 200,
+  "first_date": "1999-12-26 15:59",
+  "last_date": "2000-01-10 03:48",
+  "files": [
+   "1999-12-26--mail.md",
+   "1999-12-27--mail.md",
+   "1999-12-28--mail.md",
+   "1999-12-29--mail.md",
+   "1999-12-30--mail.md",
+   "2000-01-01--mail.md",
+   "2000-01-03--mail.md",
+   "2000-01-04--mail.md",
+   "2000-01-05--mail.md",
+   "2000-01-06--mail.md",
+   "2000-01-07--mail.md",
+   "2000-01-10--mail.md"
+  ],
+  "chars": 173076
+ },
+ "harness_cli": "2.1.263 (Claude Code)",
+ "exit_code": 0,
+ "wall_seconds": 479,
+ "quota_before": {
+  "five_hour": 18.0,
+  "seven_day": 40.0,
+  "extra_usage": null
+ },
+ "quota_after": {
+  "five_hour": 19.0,
+  "seven_day": 41.0,
+  "extra_usage": null
+ },
+ "gates": {
+  "lint": "green",
+  "sleep_audit": "green"
+ },
+ "commits_by_run": 1,
+ "dirty_files_after": 0,
+ "inbox_files_left": 0,
+ "date_leaks": {
+  "count": 0,
+  "examples": []
+ },
+ "open_questions": 1,
+ "sizes": {
+  "root": {
+   "files": 1,
+   "chars": 2716
+  },
+  "state": {
+   "files": 1,
+   "chars": 498
+  },
+  "questions": {
+   "files": 1,
+   "chars": 632
+  },
+  "todo": {
+   "files": 1,
+   "chars": 1345
+  },
+  "domains": {
+   "files": 15,
+   "chars": 21360
+  },
+  "people": {
+   "files": 12,
+   "chars": 6753
+  },
+  "archive_inbox": {
+   "files": 26,
+   "chars": 375284
+  },
+  "archive_other": {
+   "files": 0,
+   "chars": 0
+  }
+ },
+ "harness": {
+  "subtype": "success",
+  "is_error": false,
+  "num_turns": 49,
+  "duration_ms": 476957,
+  "duration_api_ms": 440519,
+  "total_cost_usd": 6.156094,
+  "usage": {
+   "input_tokens": 68,
+   "cache_creation_input_tokens": 263270,
+   "cache_read_input_tokens": 3475188,
+   "output_tokens": 36751,
+   "output_tokens_details": {
+    "thinking_tokens": 17508
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 263270,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 702,
+     "cache_read_input_tokens": 67499,
+     "cache_creation_input_tokens": 507,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 507
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard"
+  },
+  "modelUsage": {
+   "claude-sonnet-5-5": {
+    "inputTokens": 40543,
+    "outputTokens": 57296,
+    "cacheReadInputTokens": 3776558,
+    "cacheCreationInputTokens": 263270,
+    "webSearchRequests": 0,
+    "costUSD": 6.156094,
+    "contextWindow": 200000,
+    "maxOutputTokens": 32000,
+    "thinkingTokens": 17508,
+    "canonicalModel": "claude-sonnet-5-5",
+    "provider": "firstParty",
+    "costBasis": "unknown"
+   }
+  },
+  "stop_reason": "end_turn",
+  "result_summary": "The consolidation for 2000-01-10 is committed as `a5d0bbd` and not pushed. `lint.py` and `sleep-audit.py` were both green on the first run, so no fix or reset was needed.\n\n- **Memory changes:**\n  - Nine new topics: `research-requests-2000-q1`, `gas-production-and-storage-notes`, `model-risk-audit-1999`, `external-requests-2000-01`, `enron-announcements-2000-01`, `research-group-equipment-2000-01`, `research-group-staffing-2000-01` and the updated `research-requests-1999-q4` and `conferences-and-external-requests`.\n  - Five new people: Vasant Shanbhogue, Bryan Seyfried, Katja Schilling, Michael Guerriero and John Peyton. Six existing people entities were updated.\n  - The work, organization, industry and people indexes, plus `state.md` and `todo.md`, were refreshed. `todo.md` has 7 open items, within the cap of 20.\n- **Rotation and archive:** the one ongoing line that closed was Clayton's \"Wellhead to BurnerTip\" course line, now in `## History`. All 12 inbox logs went to `memory/archive/inbox/` by `git mv`, with no collisions.\n- **Questions:** one approval question is queued, due 2000-02-09. It asks whether \"Trisha Tlapek\" and \"Patricia Tlapek\" are the same person. Nothing was merged or aliased.\n- **Left alone:** `memory/.sleep-lock` and the untracked `dataset/runs/sleep-02.*` files. There was no `(sleep-task)` block.\n- **Warnings:** lint shows 9 over-target-budget warnings and no errors. Seven are topic files that the new material pushed past 1600 characters; the other two are `MEMORY.md` and `AGENTS.md`. Nothing is near its ceiling, so I didn't compress anything. The commit message records the cost (about $6.0 of $20) and the `wc -c` sizes (28,330 chars across the 27 domain and people files)."
+ },
+ "date_leaks_first_check": {
+  "count": 1,
+  "examples": [
+   "questions.md:7 2000-02-09"
+  ]
+ },
+ "note": "The runner stopped here on a false date leak: questions.md carried a due date 30 days after the simulated today, which the first version of date_leaks.py rejected. The check now allows one year of slack either side; re-checked with it, zero leaks. All other gates were green."
+}
