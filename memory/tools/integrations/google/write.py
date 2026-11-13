@@ -1,0 +1,313 @@
+#!/usr/bin/env python3
+"""write.py — creates a calendar event, a task, or a Gmail DRAFT. IT CANNOT SEND.
+
+Design contract (docs/DESIGN.md §13.1): writing to an external system requires explicit
+approval, without exception. So nothing is applied without --confirm; a run without it
+prints what it would do and exits (a dry run).
+
+THE SEND GUARANTEE: Google has no "write a draft but never send" scope — gmail.compose is
+also allowed to send. The guarantee comes from this file: there is NO call to messages.send
+or drafts.send anywhere in it, and none may be added. Sending is the human's job.
+
+REMINDERS: an event gets a **popup** reminder 60 minutes ahead by default. Google offers two
+reminder methods: `popup` (a phone or desktop notification — this is the one people mean by
+"notify me") and `email`. --remind 0 turns the reminder off; --email does not replace the
+popup, it adds an email reminder alongside it.
+
+A popup is scheduled LOCALLY on the phone: if the reminder time passes before the event has
+synced to the device, the notification is never set up, and Google does not fire the backlog
+afterwards. Very short-notice reminders are therefore unreliable, and this tool warns under
+ten minutes. Email reminders are server-side and unaffected by sync — use --email when it matters.
+
+Time zone: pass --tz (an IANA name such as Europe/Berlin), or set ASSISTANT_TZ. With neither,
+the machine's local time zone is used and Google falls back to the calendar's own default.
+
+Usage:
+  python3 write.py event --title "..." --start 2026-09-03T14:00 \
+      [--end ...] [--description ...] [--remind 60] [--email] [--tz ...] --confirm
+  python3 write.py task --title "..." [--due 2026-09-15] [--description ...] --confirm
+  python3 write.py draft --to a@b.com --subject "..." --body "..." \
+      [--attach path/file.pdf ...] --confirm
+
+HTML PART: a draft is written as plain text + HTML (multipart/alternative). Why: Gmail opens a
+text/plain-only draft in plain-text mode and hard-wraps its lines at ~70 characters when it is
+sent, so the recipient sees sentences broken mid-line. The HTML part puts Gmail in rich-text
+mode and the lines flow to the reader's screen.
+"""
+import argparse
+import base64
+import datetime as dt
+import html
+import mimetypes
+import os
+import sys
+import urllib.error
+from email.message import EmailMessage
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _api import access_token, api, error_message  # noqa: E402
+
+TASKS = "https://tasks.googleapis.com/tasks/v1/lists/@default/tasks"
+
+
+def _zone(name):
+    """Return (tzinfo, iana_name_or_None). Falls back to the machine's local zone."""
+    if name:
+        try:
+            from zoneinfo import ZoneInfo
+            return ZoneInfo(name), name
+        except Exception:
+            sys.exit(f"ERROR: unknown time zone {name!r} (expected an IANA name, e.g. Europe/Berlin)")
+    return dt.datetime.now().astimezone().tzinfo, None
+
+
+def event(a, tok):
+    tz, tz_name = _zone(a.tz or os.environ.get("ASSISTANT_TZ"))
+    # The Calendar API wants full RFC3339: a secondless "2026-09-03T14:00" returns 400.
+    # That is the shape the help text suggests, so it is normalised here.
+    try:
+        start_dt = dt.datetime.fromisoformat(a.start)
+    except ValueError:
+        sys.exit(f"ERROR: could not read --start: {a.start!r} (expected 2026-09-03T14:00)")
+    if start_dt.tzinfo is None:
+        start_dt = start_dt.replace(tzinfo=tz)
+    end_dt = dt.datetime.fromisoformat(a.end) if a.end else start_dt + dt.timedelta(hours=1)
+    if end_dt.tzinfo is None:
+        end_dt = end_dt.replace(tzinfo=tz)
+
+    overrides = []
+    if a.remind > 0:
+        overrides.append({"method": "popup", "minutes": a.remind})
+        if a.email:
+            overrides.append({"method": "email", "minutes": a.remind})
+
+    start_block = {"dateTime": start_dt.isoformat()}
+    end_block = {"dateTime": end_dt.isoformat()}
+    if tz_name:
+        start_block["timeZone"] = tz_name
+        end_block["timeZone"] = tz_name
+
+    body = {"summary": a.title, "description": a.description or "",
+            "start": start_block, "end": end_block,
+            "reminders": {"useDefault": False, "overrides": overrides}}
+
+    how = (f"{a.remind} min before, " + "+".join(o["method"] for o in overrides)) \
+        if overrides else "NO reminder"
+    print(f"CALENDAR: {start_dt.isoformat()} → {end_dt.isoformat()}  \"{a.title}\"  ({how})")
+
+    if overrides:
+        minutes_left = (start_dt - dt.timedelta(minutes=a.remind)
+                        - dt.datetime.now(start_dt.tzinfo)).total_seconds() / 60
+        if minutes_left < 10:
+            print(f"  WARNING: {minutes_left:.0f} min until the reminder. If the phone has not "
+                  "synced by then the notification never fires — allow more lead time, or add --email.")
+    if not a.confirm:
+        return print("dry run — add --confirm to apply")
+    try:
+        r = api("https://www.googleapis.com/calendar/v3/calendars/primary/events", tok,
+                method="POST", body=body)
+    except urllib.error.HTTPError as e:
+        sys.exit(f"ERROR ({e.code}): {error_message(e) or 'could not write to the calendar'}")
+    print("created:", r.get("htmlLink", r.get("id")))
+
+
+def task(a, tok):
+    """A Google Tasks item. It shows up in the calendar's "Tasks" layer.
+
+    LIMIT: due dates in the Tasks API are DAY-level — Google discards the time part of `due`,
+    and the time can be neither written nor read through the API. If you need a notification at
+    a specific minute, use `event`; `task` is for something to be done during a day.
+    """
+    body = {"title": a.title}
+    if a.description:
+        body["notes"] = a.description
+    if a.due:
+        body["due"] = f"{a.due}T00:00:00.000Z"
+    print(f"TASK: {a.due or '(no due date)'}  \"{a.title}\"  (due dates are day-level — no time kept)")
+    if not a.confirm:
+        return print("dry run — add --confirm to apply")
+    try:
+        r = api(TASKS, tok, method="POST", body=body)
+    except urllib.error.HTTPError as e:
+        if e.code in (401, 403):
+            sys.exit(f"ERROR ({e.code}): {error_message(e) or 'permission error'}\n"
+                     "  — if it says 'API has not been used': enable the Tasks API in Cloud Console.\n"
+                     "  — if it complains about a scope: re-run auth.py.")
+        raise
+    print("created, id:", r.get("id"))
+
+
+def task_update(a, tok):
+    """Update an existing Google Tasks item (title / notes / due date / completed).
+
+    WHY: the tool could only OPEN tasks. When a decision changes, the trace it left in Tasks
+    goes stale and cannot be corrected — a decision has to be aligned everywhere it left a mark,
+    and the task list is one of those marks.
+
+    Found by --find rather than by id: carrying ids around by hand produces human error. If the
+    search matches anything other than exactly one task the tool REFUSES to run — stopping beats
+    editing the wrong task.
+    """
+    try:
+        r = api(TASKS, tok, params={"showCompleted": "false", "maxResults": "100"})
+    except urllib.error.HTTPError as e:
+        sys.exit(f"ERROR ({e.code}): {error_message(e) or 'could not read tasks'}")
+    needle = a.find.casefold()
+    found = [t for t in (r.get("items") or []) if needle in (t.get("title") or "").casefold()]
+    if not found:
+        sys.exit(f"no match: {a.find!r}")
+    if len(found) > 1:
+        print("more than one match — narrow --find:", file=sys.stderr)
+        for t in found:
+            print(f"  · {t.get('title')}", file=sys.stderr)
+        sys.exit(2)
+    t = found[0]
+    patch = {}
+    if a.title:
+        patch["title"] = a.title
+    if a.description is not None:
+        patch["notes"] = a.description
+    if a.due:
+        patch["due"] = f"{a.due}T00:00:00.000Z"
+    if a.complete:
+        patch["status"] = "completed"
+    if not patch:
+        sys.exit("nothing to change (--title/--description/--due/--complete)")
+    print(f"TASK: \"{t.get('title')}\"  (due {(t.get('due') or '')[:10] or '—'})")
+    for k, v in patch.items():
+        print(f"  {k}: {v}")
+    if not a.confirm:
+        return print("dry run — add --confirm to apply")
+    try:
+        api(f"{TASKS}/{t['id']}", tok, method="PATCH", body=patch)
+    except urllib.error.HTTPError as e:
+        sys.exit(f"ERROR ({e.code}): {error_message(e) or 'could not update the task'}")
+    print("updated, id:", t["id"])
+
+
+def task_delete(a, tok):
+    """Delete the single task matched by --find. Meant for cleaning up test records.
+
+    A write tool that cannot clean up after itself cannot be tested, and an untested write tool
+    has no business touching a real account. Whether the assistant should close your real tasks
+    is a policy question, not a tool question — decide it in your own rules file.
+    """
+    try:
+        r = api(TASKS, tok, params={"showCompleted": "true", "maxResults": "100"})
+    except urllib.error.HTTPError as e:
+        sys.exit(f"ERROR ({e.code}): {error_message(e) or 'could not read tasks'}")
+    needle = a.find.casefold()
+    found = [t for t in (r.get("items") or []) if needle in (t.get("title") or "").casefold()]
+    if len(found) != 1:
+        sys.exit(f"expected exactly one match, found {len(found)}: {a.find!r}")
+    t = found[0]
+    print(f"WILL DELETE: \"{t.get('title')}\"")
+    if not a.confirm:
+        return print("dry run — add --confirm to apply")
+    try:
+        api(f"{TASKS}/{t['id']}", tok, method="DELETE")
+    except urllib.error.HTTPError as e:
+        sys.exit(f"ERROR ({e.code}): {error_message(e) or 'could not delete the task'}")
+    print("deleted, id:", t["id"])
+
+
+def _html(text):
+    # The shape Gmail writes itself: one <div>, a <br> per line. A blank line separates paragraphs.
+    lines = text.replace("\r\n", "\n").strip("\n").split("\n")
+    return '<div dir="ltr">' + "<br>\n".join(html.escape(s, quote=False) for s in lines) + "</div>\n"
+
+
+def draft(a, tok):
+    m = EmailMessage()
+    m["To"] = a.to
+    m["Subject"] = a.subject
+    m.set_content(a.body)
+    m.add_alternative(_html(a.body), subtype="html")
+    print(f"DRAFT: → {a.to}  \"{a.subject}\"  ({len(a.body)} characters)")
+    # Attachments are embedded in the raw MIME message. Gmail's drafts.create
+    # endpoint (no uploadType) takes roughly 5 MB of raw body, and base64 grows
+    # the payload by ~4/3 — so stop above 3.5 MB of source bytes and say why,
+    # instead of letting the API return an opaque 400.
+    total = 0
+    for path in (a.attach or []):
+        f = Path(path)
+        if not f.is_file():
+            sys.exit(f"ERROR: attachment not found: {path}")
+        data = f.read_bytes()
+        total += len(data)
+        kind, _ = mimetypes.guess_type(f.name)
+        maintype, subtype = (kind or "application/octet-stream").split("/", 1)
+        m.add_attachment(data, maintype=maintype, subtype=subtype, filename=f.name)
+        print(f"  attachment: {f.name}  ({len(data) // 1024} KB, {maintype}/{subtype})")
+    if total > 3_500_000:
+        sys.exit(f"ERROR: attachments too large ({total // 1024} KB); the Gmail draft "
+                 "endpoint takes about 5 MB of base64 body. Shrink the file or link it.")
+    print("  NOTE: this only creates a draft; this tool has no send capability.")
+    if not a.confirm:
+        return print("dry run — add --confirm to apply")
+    raw = base64.urlsafe_b64encode(m.as_bytes()).decode()
+    if a.update:
+        # Replaces an existing draft in place (drafts.update): no second draft is left behind, and the
+        # agent never has to delete one (deleting is permanent).
+        r = api(f"https://gmail.googleapis.com/gmail/v1/users/me/drafts/{a.update}", tok,
+                method="PUT", body={"id": a.update, "message": {"raw": raw}})
+        return print("draft updated, id:", r.get("id"), "— sending it is your job (the Gmail interface)")
+    r = api("https://gmail.googleapis.com/gmail/v1/users/me/drafts", tok,
+            method="POST", body={"message": {"raw": raw}})
+    print("draft created, id:", r.get("id"), "— sending it is your job (the Gmail interface)")
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    sub = ap.add_subparsers(dest="command", required=True)
+
+    e = sub.add_parser("event")
+    e.add_argument("--title", required=True)
+    e.add_argument("--start", required=True, help="2026-09-03T14:00")
+    e.add_argument("--end")
+    e.add_argument("--description")
+    e.add_argument("--remind", type=int, default=60,
+                   help="minutes before the event to notify (default 60; 0 = no reminder)")
+    e.add_argument("--email", action="store_true",
+                   help="add an email reminder alongside the popup (server-side; unaffected by phone sync)")
+    e.add_argument("--tz", help="IANA time zone, e.g. Europe/Berlin (default: ASSISTANT_TZ, then local)")
+    e.add_argument("--confirm", action="store_true")
+
+    t = sub.add_parser("task")
+    t.add_argument("--title", required=True)
+    t.add_argument("--due", help="2026-09-15 (day-level; no time is kept)")
+    t.add_argument("--description")
+    t.add_argument("--confirm", action="store_true")
+
+    tu = sub.add_parser("task-update")
+    tu.add_argument("--find", required=True,
+                    help="part of the title; the tool refuses to run unless exactly one matches")
+    tu.add_argument("--title")
+    tu.add_argument("--description")
+    tu.add_argument("--due")
+    tu.add_argument("--complete", action="store_true")
+    tu.add_argument("--confirm", action="store_true")
+
+    td = sub.add_parser("task-delete")
+    td.add_argument("--find", required=True)
+    td.add_argument("--confirm", action="store_true")
+
+    d = sub.add_parser("draft")
+    d.add_argument("--to", required=True)
+    d.add_argument("--subject", required=True)
+    d.add_argument("--body", required=True)
+    d.add_argument("--attach", action="append", metavar="PATH",
+                   help="file to attach; may be given more than once")
+    d.add_argument("--update", metavar="DRAFT_ID",
+                   help="replace this existing draft in place instead of creating a new one")
+    d.add_argument("--confirm", action="store_true")
+
+    a = ap.parse_args()
+    tok = access_token()
+    {"event": event, "task": task, "task-update": task_update,
+     "task-delete": task_delete, "draft": draft}[a.command](a, tok)
+
+
+if __name__ == "__main__":
+    main()
