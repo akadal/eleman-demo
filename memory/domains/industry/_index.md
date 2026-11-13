@@ -1,16 +1,16 @@
 ---
 type: index
 domain: industry
-updated: 1999-11-30
+updated: 1999-12-25
 ---
 # Industry — index
 
-Scope: markets, regulation, conferences, universities and other outside institutions.
+Scope: the energy-risk field outside Enron: conferences, courses, external contacts and requests.
 
 ## Hot
 
-(nothing yet)
+- 2000 commitments: Real Options NY (March), European Energy (3-4 Apr), POWER 2000 (9-10 May), Risk Boston (13-14 Jun).
 
 ## Files
 
-(nothing yet)
+- memory/domains/industry/conferences-and-external-requests.md — conferences and outside requests, Dec 1999 - 2000

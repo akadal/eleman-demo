@@ -1,7 +1,7 @@
 ---
 type: index
 domain: work
-updated: 1999-11-30
+updated: 1999-12-25
 ---
 # Work — index
 
@@ -9,8 +9,9 @@ Scope: the owner's own projects, models, deals, decisions and research output; n
 
 ## Hot
 
-(nothing yet)
+- Naphtha caps for Enron India priced; Dabhol firm power structuring request open (12-25).
+- PSE swap needs 20-year USD/Euro vol and CPI correlation view.
 
 ## Files
 
-(nothing yet)
+- memory/domains/work/research-requests-1999-q4.md — research group pricing/modelling requests, Nov-Dec 1999

@@ -9,4 +9,7 @@
 - Cap: 20 open items (lint warns). Over the cap means it is time to prune, not time to raise the cap.
 -->
 
-(nothing yet)
+- [ ] Give a view on 20-year USD/Euro vol and CPI correlation for the PSE swap [[research-requests-1999-q4]]
+- [ ] Help structure the Dabhol firm power sale proposal [[research-requests-1999-q4]]
+- [ ] Have Stinson audit the UK power vol curve generator [[research-requests-1999-q4]]
+

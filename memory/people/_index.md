@@ -1,6 +1,6 @@
 ---
 type: index
-updated: 1999-11-30
+updated: 1999-12-25
 ---
 # People and organisations — index
 
@@ -11,4 +11,9 @@ Format, one line each: `name — aliases — domains — path`
 
 ## Files
 
-(nobody yet)
+- Stinson Gibner — Stinson — work, industry — memory/people/stinson-gibner.md
+- Shirley Crenshaw — Shirley — organization — memory/people/shirley-crenshaw.md
+- Kevin G Moore — Kevin Moore — organization — memory/people/kevin-moore.md
+- Clayton Vernon — Clayton — work — memory/people/clayton-vernon.md
+- Pinnamaneni Krishnarao — Krishna — work — memory/people/pinnamaneni-krishnarao.md
+- Sandeep Kohli — (none) — work — memory/people/sandeep-kohli.md
