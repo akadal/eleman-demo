@@ -208,7 +208,7 @@ lint-config:
     state:  [null, 800]
     todo_open_item_cap: 20
     index:  [1600, 2000]
-    people_index: [2300, 2900] # people/_index.md — the alias table grows with people, not files
+    people_index: [5000, 6500] # people/_index.md — raised for eleman-demo (dataset/README.md, Deviations); shipped value [2300, 2900]
     topic:  [1600, 2800]
     entity: [1000, 1600]
   questions_grammar: "^- \[\d{4}-\d{2}-\d{2}\] (approval|conflict|fact)( · due \d{4}-\d{2}-\d{2})?( · asked \d+)? — "
