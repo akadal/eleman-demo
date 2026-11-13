@@ -5,7 +5,7 @@ domain: organization
 title: "Research group staffing, hires and absences, Dec 1999 - Jan 2000"
 summary: "Vincent Tang green card, Jason Sokolov internship, a lost recruit, candidates and planned absences."
 status: active
-updated: 2000-01-10
+updated: 2000-01-11
 ---
 # Staffing
 
@@ -15,3 +15,5 @@ updated: 2000-01-10
 - [2000-01-06→] Insurance hire: Vasant Shanbhogue proposed Ray Spudeck (NAIC, recommended by Prof. MacMinn) for the insurance group and asked Vince to phone him the week of 10 Jan.
 - [2000-01-07] Craig Jimenez accepted an amended offer from Southern Company Energy Marketing (higher pay, rotation through structuring, trading and research) instead of Stinson's group; Vince: "one of many data points" that competitors pay more.
 - [2000-01-07] Absences: Stinson 22-25 Feb; Shirley Friday 14 Jan and Friday 4 Feb; Vince approved both.
+- [2000-01-10] Bob Lee is invited to interview Mon 24 Jan with Vince, [[stinson-gibner]], Zimin Lu, Paulo Issler, [[vasant-shanbhogue]], [[pinnamaneni-krishnarao]] and Grant Masson; HR (Elizabeth Grant) asked the level and Vince said manager; Bob confirmed and arrives Sunday.
+- [2000-01-11] William "Sam" Smith accepted Enron's offer (to Brad McSherry and Vince, cc Gretchen Jennings, Shirley) and asked the effective hire date for his switch from ProStaff; likely the "Sam" of 30 Dec (ProStaff, room 1954 as "Wm. Sam Smith").

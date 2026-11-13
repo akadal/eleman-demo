@@ -16,3 +16,6 @@
 - [ ] Schedule the Argentina modelling meeting with Michael Guerriero via Shirley [[research-requests-2000-q1]]
 - [ ] Review the credit trading website articles and Katja's copyright follow-up [[research-requests-1999-q4]]
 - [ ] Phone insurance candidate Ray Spudeck (week of 10 Jan) [[research-group-staffing-2000-01]]
+- [ ] Reply to Andrew Schuleman on the Model Development report draft by Wed 12 Jan [[risk-models-it-status-2000-01]]
+- [ ] Call Joe Gold Wed 12 Jan about sponsoring the Commodities Now publication [[declined-invitations-and-vendors-2000-01]]
+- [ ] Talk to Kevin Moore about the Thursday 20 Jan celebration for Mike Roberts [[promotions-2000-01]]

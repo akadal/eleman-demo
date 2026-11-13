@@ -1,7 +1,7 @@
 ---
 type: index
 domain: industry
-updated: 2000-01-10
+updated: 2000-01-11
 ---
 # Industry — index
 
@@ -16,3 +16,4 @@ Scope: the energy-risk field outside Enron: conferences, courses, external conta
 
 - memory/domains/industry/conferences-and-external-requests.md — conferences and outside requests, Dec 1999 - 2000
 - memory/domains/industry/external-requests-2000-01.md — Jan-Apr 2000 events and outside requests
+- memory/domains/industry/declined-invitations-and-vendors-2000-01.md — declined Infocast/IIR talks, ESAI, RiskCare, Commodities Now

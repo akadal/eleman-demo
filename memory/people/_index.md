@@ -1,6 +1,6 @@
 ---
 type: index
-updated: 2000-01-10
+updated: 2000-01-11
 ---
 # People and organisations — index
 
@@ -22,3 +22,5 @@ Format, one line each: `name — aliases — domains — path`
 - Katja Schilling — (none) — work — memory/people/katja-schilling.md
 - Michael Guerriero — (none) — work — memory/people/michael-guerriero.md
 - John Peyton — (none) — work — memory/people/john-peyton.md
+- Vincent Tang — (none) — work, organization — memory/people/vincent-tang.md
+- Mike Roberts — (none) — organization, industry — memory/people/mike-roberts.md

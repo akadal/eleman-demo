@@ -5,7 +5,7 @@ entity: person
 name: "Stinson Gibner"
 aliases: ["Stinson"]
 domains: [work, industry, organization]
-updated: 2000-01-10
+updated: 2000-01-11
 ---
 # Stinson Gibner
 
@@ -17,4 +17,5 @@ Research group member in Vince Kaminski's team; Vince calls him his associate.
 ## Context: industry
 - Recommended by Vince as Monte Carlo course speaker and sent to the Rice program meeting: memory/domains/industry/conferences-and-external-requests.md
 ## Context: organization
-- Hosted the 8 Jan party; Jimenez recruit lost; vacation 22-25 Feb: memory/domains/organization/research-group-staffing-2000-01.md
+- Hosted 8 Jan party; Jimenez lost; Bob Lee panel; off 22-25 Feb: memory/domains/organization/research-group-staffing-2000-01.md
+- Second desk at Enron Communications (4415c): memory/domains/organization/research-group-seating-2000-01.md
