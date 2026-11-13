@@ -1,0 +1,146 @@
+{
+ "sleep": 1,
+ "simulated_today": "1999-12-25",
+ "feed": {
+  "batch": 1,
+  "first_seq": 1,
+  "last_seq": 100,
+  "first_date": "1999-11-30 03:22",
+  "last_date": "1999-12-25 14:35",
+  "files": [
+   "1999-11-30--mail.md",
+   "1999-12-10--mail.md",
+   "1999-12-12--mail.md",
+   "1999-12-13--mail.md",
+   "1999-12-14--mail.md",
+   "1999-12-15--mail.md",
+   "1999-12-16--mail.md",
+   "1999-12-17--mail.md",
+   "1999-12-19--mail.md",
+   "1999-12-20--mail.md",
+   "1999-12-21--mail.md",
+   "1999-12-22--mail.md",
+   "1999-12-23--mail.md",
+   "1999-12-25--mail.md"
+  ],
+  "chars": 202208
+ },
+ "harness_cli": "2.1.263 (Claude Code)",
+ "exit_code": 0,
+ "wall_seconds": 261,
+ "quota_before": {
+  "five_hour": 16.0,
+  "seven_day": 40.0,
+  "extra_usage": null
+ },
+ "quota_after": {
+  "five_hour": 18.0,
+  "seven_day": 40.0,
+  "extra_usage": null
+ },
+ "gates": {
+  "lint": "green",
+  "sleep_audit": "green"
+ },
+ "commits_by_run": 1,
+ "dirty_files_after": 1,
+ "inbox_files_left": 0,
+ "date_leaks": {
+  "count": 0,
+  "examples": []
+ },
+ "open_questions": 0,
+ "sizes": {
+  "root": {
+   "files": 1,
+   "chars": 2716
+  },
+  "state": {
+   "files": 1,
+   "chars": 388
+  },
+  "questions": {
+   "files": 1,
+   "chars": 270
+  },
+  "todo": {
+   "files": 1,
+   "chars": 898
+  },
+  "domains": {
+   "files": 8,
+   "chars": 6731
+  },
+  "people": {
+   "files": 7,
+   "chars": 3212
+  },
+  "archive_inbox": {
+   "files": 14,
+   "chars": 202208
+  },
+  "archive_other": {
+   "files": 0,
+   "chars": 0
+  }
+ },
+ "harness": {
+  "subtype": "success",
+  "is_error": false,
+  "num_turns": 44,
+  "duration_ms": 259578,
+  "duration_api_ms": 244970,
+  "total_cost_usd": 4.218170500000001,
+  "usage": {
+   "input_tokens": 52,
+   "cache_creation_input_tokens": 208901,
+   "cache_read_input_tokens": 2375285,
+   "output_tokens": 19971,
+   "output_tokens_details": {
+    "thinking_tokens": 8078
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 208901,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 464,
+     "cache_read_input_tokens": 88754,
+     "cache_creation_input_tokens": 569,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 569
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard"
+  },
+  "modelUsage": {
+   "claude-sonnet-5-5": {
+    "inputTokens": 4920,
+    "outputTokens": 33392,
+    "cacheReadInputTokens": 2539521,
+    "cacheCreationInputTokens": 208901,
+    "webSearchRequests": 0,
+    "costUSD": 4.218170500000001,
+    "contextWindow": 200000,
+    "maxOutputTokens": 32000,
+    "thinkingTokens": 8078,
+    "canonicalModel": "claude-sonnet-5-5",
+    "provider": "firstParty",
+    "costBasis": "unknown"
+   }
+  },
+  "stop_reason": "end_turn",
+  "result_summary": "The consolidation is committed locally as `be9c1c2`, but I did not push it. `origin` (`github.com/akadal/eleman-demo`) is a public repository, and AGENTS.md §9 says a public repository never takes personal memory. Please point `origin` at a private repo, then run `git push origin main`.\n\nAll 14 inbox logs from feed 01 (1999-11-30 to 1999-12-25) were distilled and moved to `memory/archive/inbox/`. Lint and sleep-audit were both green before the commit, with only the existing over-target warnings for `MEMORY.md` and `AGENTS.md`.\n\n- **Topic files:** four, covering research requests, the 19th-floor office move, Enron-wide announcements, and conferences and outside requests.\n- **People:** six entities with an alias table in `memory/people/_index.md`.\n- **Other files:** the four domain indexes (except `personal`, which stays empty), `state.md`, and three `todo.md` items.\n- **Left out:** newsletters, greetings, duplicate forwards to the AOL address, and private details such as Sandeep Kohli's health and home phone numbers.\n- **Nothing queued:** there was no `(sleep-task)` block and no approval-gate items, so `questions.md` is unchanged. The run logged nothing of its own to the inbox.\n\n`dataset/runs/` is still untracked and was not staged."
+ }
+}
