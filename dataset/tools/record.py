@@ -7,6 +7,7 @@ import argparse
 import json
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -85,6 +86,8 @@ def main():
         "sizes": layer_sizes(),
         "harness": harness(a.kk),
     }
+    sys.stdout.reconfigure(encoding="utf-8", newline="
+")  # Windows consoles default to cp1252
     print(json.dumps(rec, indent=1, ensure_ascii=False))
 
 

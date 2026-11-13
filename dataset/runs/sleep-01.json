@@ -43,7 +43,7 @@
   "sleep_audit": "green"
  },
  "commits_by_run": 1,
- "dirty_files_after": 1,
+ "dirty_files_after": 0,
  "inbox_files_left": 0,
  "date_leaks": {
   "count": 0,
@@ -141,6 +141,7 @@
    }
   },
   "stop_reason": "end_turn",
-  "result_summary": "The consolidation is committed locally as `be9c1c2`, but I did not push it. `origin` (`github.com/akadal/eleman-demo`) is a public repository, and AGENTS.md ง9 says a public repository never takes personal memory. Please point `origin` at a private repo, then run `git push origin main`.\n\nAll 14 inbox logs from feed 01 (1999-11-30 to 1999-12-25) were distilled and moved to `memory/archive/inbox/`. Lint and sleep-audit were both green before the commit, with only the existing over-target warnings for `MEMORY.md` and `AGENTS.md`.\n\n- **Topic files:** four, covering research requests, the 19th-floor office move, Enron-wide announcements, and conferences and outside requests.\n- **People:** six entities with an alias table in `memory/people/_index.md`.\n- **Other files:** the four domain indexes (except `personal`, which stays empty), `state.md`, and three `todo.md` items.\n- **Left out:** newsletters, greetings, duplicate forwards to the AOL address, and private details such as Sandeep Kohli's health and home phone numbers.\n- **Nothing queued:** there was no `(sleep-task)` block and no approval-gate items, so `questions.md` is unchanged. The run logged nothing of its own to the inbox.\n\n`dataset/runs/` is still untracked and was not staged."
- }
+  "result_summary": "The consolidation is committed locally as `be9c1c2`, but I did not push it. `origin` (`github.com/akadal/eleman-demo`) is a public repository, and AGENTS.md ยง9 says a public repository never takes personal memory. Please point `origin` at a private repo, then run `git push origin main`.\n\nAll 14 inbox logs from feed 01 (1999-11-30 to 1999-12-25) were distilled and moved to `memory/archive/inbox/`. Lint and sleep-audit were both green before the commit, with only the existing over-target warnings for `MEMORY.md` and `AGENTS.md`.\n\n- **Topic files:** four, covering research requests, the 19th-floor office move, Enron-wide announcements, and conferences and outside requests.\n- **People:** six entities with an alias table in `memory/people/_index.md`.\n- **Other files:** the four domain indexes (except `personal`, which stays empty), `state.md`, and three `todo.md` items.\n- **Left out:** newsletters, greetings, duplicate forwards to the AOL address, and private details such as Sandeep Kohli's health and home phone numbers.\n- **Nothing queued:** there was no `(sleep-task)` block and no approval-gate items, so `questions.md` is unchanged. The run logged nothing of its own to the inbox.\n\n`dataset/runs/` is still untracked and was not staged."
+ },
+ "note": "Corrected after the run: the runner counted its own record file (dataset/runs/) as a dirty tree and stopped; this file was also written in cp1252, re-encoded to UTF-8. The model did not push its commit (it read AGENTS.md section 9 as forbidding a public repository); the runner pushed it. All three fixed before batch 2."
 }
