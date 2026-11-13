@@ -1,0 +1,135 @@
+{
+ "sleep": 3,
+ "simulated_today": "2000-01-11",
+ "feed": {
+  "batch": 3,
+  "first_seq": 201,
+  "last_seq": 300,
+  "first_date": "2000-01-10 04:23",
+  "last_date": "2000-01-11 05:40",
+  "files": [
+   "2000-01-10--mail-2.md",
+   "2000-01-11--mail.md"
+  ],
+  "chars": 67758
+ },
+ "harness_cli": "2.1.263 (Claude Code)",
+ "exit_code": 0,
+ "wall_seconds": 483,
+ "quota_before": {
+  "five_hour": 19.0,
+  "seven_day": 41.0,
+  "extra_usage": null
+ },
+ "quota_after": {
+  "five_hour": 23.0,
+  "seven_day": 41.0,
+  "extra_usage": null
+ },
+ "gates": {
+  "lint": "green",
+  "sleep_audit": "green"
+ },
+ "commits_by_run": 1,
+ "dirty_files_after": 0,
+ "inbox_files_left": 0,
+ "date_leaks": {
+  "count": 0,
+  "examples": []
+ },
+ "open_questions": 1,
+ "sizes": {
+  "root": {
+   "files": 1,
+   "chars": 2716
+  },
+  "state": {
+   "files": 1,
+   "chars": 604
+  },
+  "questions": {
+   "files": 1,
+   "chars": 722
+  },
+  "todo": {
+   "files": 1,
+   "chars": 1692
+  },
+  "domains": {
+   "files": 21,
+   "chars": 31433
+  },
+  "people": {
+   "files": 14,
+   "chars": 8438
+  },
+  "archive_inbox": {
+   "files": 28,
+   "chars": 443042
+  },
+  "archive_other": {
+   "files": 1,
+   "chars": 2413
+  }
+ },
+ "harness": {
+  "subtype": "success",
+  "is_error": false,
+  "num_turns": 44,
+  "duration_ms": 481235,
+  "duration_api_ms": 461802,
+  "total_cost_usd": 5.465725999999999,
+  "usage": {
+   "input_tokens": 58,
+   "cache_creation_input_tokens": 219473,
+   "cache_read_input_tokens": 3278805,
+   "output_tokens": 52467,
+   "output_tokens_details": {
+    "thinking_tokens": 35730
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 219473,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 578,
+     "cache_read_input_tokens": 146285,
+     "cache_creation_input_tokens": 1325,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 1325
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard"
+  },
+  "modelUsage": {
+   "claude-sonnet-5-5": {
+    "inputTokens": 2129,
+    "outputTokens": 61501,
+    "cacheReadInputTokens": 3445652,
+    "cacheCreationInputTokens": 219473,
+    "webSearchRequests": 0,
+    "costUSD": 5.465725999999999,
+    "contextWindow": 200000,
+    "maxOutputTokens": 32000,
+    "thinkingTokens": 35730,
+    "canonicalModel": "claude-sonnet-5-5",
+    "provider": "firstParty",
+    "costBasis": "unknown"
+   }
+  },
+  "stop_reason": "end_turn",
+  "result_summary": "The 2000-01-11 consolidation is committed as `a3a4775`. I did not push, per the preamble. `lint.py` and `sleep-audit.py` were both green, with 13 over-target budget warnings and no errors.\n\n- **Distilled:** `2000-01-10--mail-2.md` and `2000-01-11--mail.md`, both moved unchanged into `memory/archive/inbox/`.\n- **New topics:**\n  - risk-model IT status\n  - 19th-floor seating\n  - promotions and bonus proposal (amounts omitted)\n  - declined Infocast/IIR talks and vendor contacts\n  - basis-report roll\n  - household notes (card digits and home address left out)\n- **New entity files:** `vincent-tang` and `mike-roberts`.\n- **Compression:** `research-requests-1999-q4.md` was compressed, with the verbatim old body in `memory/archive/work/2000/research-requests-1999-q4-detail.md`.\n- **Corrections:**\n  - The \"Vince's office is EB1933\" line is voided, since the rooms were renumbered (Vince is in EB1962).\n  - The oldest ongoing line, the 1999-11-30 vega VaR status, was closed into `## History`.\n- **Indexes, state and todo:** indexes and `state.md` are refreshed, and three items were added to `todo.md`.\n- **Questions:** I added the third \"Tricia Tlapek\" spelling to the existing Tlapek question and changed no entities or aliases.\n- **Not done:** the mail had no sleep-task, so none was logged, and nothing needed logging to the inbox. Over-target warnings remain on files that started over target. I left unrelated untracked files in `dataset/` alone."
+ },
+ "note": "The runner stopped on a dirty tree caused by the operator (dataset/tools/summary.py added during the run), not by the harness. All gates were green."
+}
